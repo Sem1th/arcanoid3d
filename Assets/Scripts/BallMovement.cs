@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
-    public static float _speed; 
+    public static float _speed;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private GameManager _gamemanager;
+    private InputMovement _isFire;
 
     private void Start()
     {
@@ -17,10 +18,17 @@ public class BallMovement : MonoBehaviour
 
     private void FixedUpdate ()
     {
+        _isFire = FindObjectOfType<InputMovement>();
+
         _rigidbody.velocity = transform.forward * _speed;
 
         if (_speed != 0)
         transform.SetParent(null);
+
+        if(InputMovement._isFire)
+        {
+            _speed = 4.0f;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

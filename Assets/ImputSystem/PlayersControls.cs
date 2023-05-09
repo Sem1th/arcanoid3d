@@ -44,6 +44,15 @@ public partial class @PlayersControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""d603fb92-cb3b-483a-a6cb-81560aa7fcff"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -110,6 +119,17 @@ public partial class @PlayersControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FireBall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2c3a0485-73ce-4baa-acc5-f5f0c3ec1eaf"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -194,6 +214,7 @@ public partial class @PlayersControls : IInputActionCollection2, IDisposable
         m_Player1 = asset.FindActionMap("Player1", throwIfNotFound: true);
         m_Player1_Movement = m_Player1.FindAction("Movement", throwIfNotFound: true);
         m_Player1_FireBall = m_Player1.FindAction("FireBall", throwIfNotFound: true);
+        m_Player1_Pause = m_Player1.FindAction("Pause", throwIfNotFound: true);
         // Player2
         m_Player2 = asset.FindActionMap("Player2", throwIfNotFound: true);
         m_Player2_Movement = m_Player2.FindAction("Movement", throwIfNotFound: true);
@@ -258,12 +279,14 @@ public partial class @PlayersControls : IInputActionCollection2, IDisposable
     private IPlayer1Actions m_Player1ActionsCallbackInterface;
     private readonly InputAction m_Player1_Movement;
     private readonly InputAction m_Player1_FireBall;
+    private readonly InputAction m_Player1_Pause;
     public struct Player1Actions
     {
         private @PlayersControls m_Wrapper;
         public Player1Actions(@PlayersControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player1_Movement;
         public InputAction @FireBall => m_Wrapper.m_Player1_FireBall;
+        public InputAction @Pause => m_Wrapper.m_Player1_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player1; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -279,6 +302,9 @@ public partial class @PlayersControls : IInputActionCollection2, IDisposable
                 @FireBall.started -= m_Wrapper.m_Player1ActionsCallbackInterface.OnFireBall;
                 @FireBall.performed -= m_Wrapper.m_Player1ActionsCallbackInterface.OnFireBall;
                 @FireBall.canceled -= m_Wrapper.m_Player1ActionsCallbackInterface.OnFireBall;
+                @Pause.started -= m_Wrapper.m_Player1ActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_Player1ActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_Player1ActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_Player1ActionsCallbackInterface = instance;
             if (instance != null)
@@ -289,6 +315,9 @@ public partial class @PlayersControls : IInputActionCollection2, IDisposable
                 @FireBall.started += instance.OnFireBall;
                 @FireBall.performed += instance.OnFireBall;
                 @FireBall.canceled += instance.OnFireBall;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -330,6 +359,7 @@ public partial class @PlayersControls : IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnFireBall(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IPlayer2Actions
     {

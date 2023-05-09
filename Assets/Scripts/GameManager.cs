@@ -9,14 +9,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text _player1Text, _player2Text;
     [SerializeField] private GameObject _ballPrefab;
     [SerializeField] private Transform _spawnPosition;
+    [SerializeField] private GameObject _panelGameOver;
+    [SerializeField] private GameObject _panelMenu;
 
     public void MissBall()
     {
         _lives -= 1;
         if(_lives <= 0)
         {
-            Debug.Log("Вы проиграли!");
-            Debug.Break();
+            _panelGameOver.SetActive(true);
+            Time.timeScale = 0; 
+            Destroy(_panelMenu);
         }
     }
 
@@ -28,11 +31,12 @@ public class GameManager : MonoBehaviour
     private void Start ()
     {
         SpawnBall();
+        Time.timeScale = 1;  
     }
 
     private void Update()
     {
-        _player1Text.text = "Жизни: " + _lives;
-        _player2Text.text = "Жизни: " + _lives;
+        _player1Text.text = "" + _lives;
+        _player2Text.text = "" + _lives;
     }
 }
